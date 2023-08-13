@@ -1,0 +1,40 @@
+def crible_eratosthenes(limite):
+    nombrePremier = [True] * (limite + 1)
+    nombrePremier[0], nombrePremier[1] = False, False
+
+    p = 2
+    while p * p <= limite:
+        if nombrePremier[p]:
+            for i in range(p * p, limite + 1, p):
+                nombrePremier[i] = False
+        p += 1
+
+    return [nombre for nombre, estPremier in enumerate(nombrePremier) if estPremier]
+
+
+def afficher_numbre_premiers_entre(m, n):
+    limite = int(n ** 0.5) + 1
+    nombrePremier_a_la_limite = crible_eratosthenes(limite)
+
+    estPremier_etendue = [True] * (n - m + 1)
+
+    for nombrePremier in nombrePremier_a_la_limite:
+        if nombrePremier * nombrePremier >= m:
+            start = nombrePremier * nombrePremier
+        else:
+            start = ((m - 1) // nombrePremier + 1) * nombrePremier
+
+        for i in range(start, n + 1, nombrePremier):
+            estPremier_etendue[i - m] = False
+
+    for i, estPremier in enumerate(estPremier_etendue):
+        if estPremier and m + i != 1:
+            print(m + i)
+
+
+# Input parsing and processing
+t = int(input())
+for _ in range(t):
+    m, n = map(int, input().split())
+    afficher_numbre_premiers_entre(m, n)
+    print()  
